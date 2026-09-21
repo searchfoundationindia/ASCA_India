@@ -91,10 +91,9 @@ p{ max-width: 62ch; color: var(--text-soft); }
 .partner-banner{
   display:block;
   width: 100%;
-  background: rgba(255,255,255,0.96);
-  border-radius: 10px;
-  padding: 14px 18px 10px;
-  margin-bottom: 28px;
+  background: #FFFFFF;
+  padding: 0;
+  margin: 0 0 40px;
   opacity: 0;
   transform: translateY(14px);
   animation: partnerIn 0.7s ease-out 0.2s forwards;
@@ -103,7 +102,6 @@ p{ max-width: 62ch; color: var(--text-soft); }
   display:block;
   width: 100%;
   height:auto;
-  border-radius: 4px;
 }
 @keyframes partnerIn{
   to{ opacity:1; transform:translateY(0); }
@@ -221,6 +219,9 @@ nav.links a:hover{ color:#fff; border-bottom-color: var(--aqua); }
   position:relative;
 }
 .hero .wrap{
+  display:block;
+}
+.hero-grid{
   display:grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 48px;
@@ -584,7 +585,7 @@ footer{
    RESPONSIVE
    ============================================ */
 @media (max-width: 860px){
-  .hero .wrap{ grid-template-columns: 1fr; }
+  .hero-grid{ grid-template-columns: 1fr; }
   .two-col{ grid-template-columns: 1fr; }
   .verify-box{ grid-template-columns: 1fr; }
   .testi-grid{ grid-template-columns: 1fr; }
@@ -625,11 +626,12 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 
 <!-- ============ HOME / HERO ============ -->
 <section id="home" class="hero">
+  <div class="partner-banner">
+    <img src="assets/partnership-banner.jpg" alt="Search Foundation and American Swimming Coaches Association partnership">
+  </div>
   <div class="wrap">
+    <div class="hero-grid">
     <div>
-      <div class="partner-banner">
-        <img src="assets/partnership-banner.jpg" alt="Search Foundation and American Swimming Coaches Association partnership">
-      </div>
       <p class="eyebrow">Swim coach certification, done right</p>
       <h1>[Headline: state your core promise in one line]</h1>
       <p class="lead">[Sub line: one or two sentences on what the foundation does and for whom.]</p>
@@ -645,6 +647,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
         <div class="stat"><span class="num">[00]</span><span class="label">Cities reached</span></div>
         <div class="stat"><span class="num">[00]</span><span class="label">Years active</span></div>
       </div>
+    </div>
     </div>
   </div>
   <div class="wave">
