@@ -3,630 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Search Foundation ASCA</title>
+<title>Home - Search Foundation ASCA</title>
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<style>
-
-/* ============================================
-   TOKENS
-   Palette is drawn from the pool deck: deep water
-   navy, chlorine aqua, and the red/white lane rope
-   markers used in competition pools.
-   ============================================ */
-:root{
-  --pool-navy:      #0B2545;
-  --pool-navy-2:    #123A5E;
-  --aqua:           #4FC7BC;
-  --aqua-deep:      #2E9C92;
-  --lane-red:       #E1553A;
-  --foam:           #F5F9FA;
-  --foam-2:         #E9F0F1;
-  --ink:            #0B1F2A;
-  --ink-soft:       #4A5C66;
-  --line:           #D8E2E4;
-
-  --bg:             var(--foam);
-  --bg-panel:       #FFFFFF;
-  --text:           var(--ink);
-  --text-soft:      var(--ink-soft);
-  --border:         var(--line);
-
-  --font-head: 'Archivo', 'Arial Narrow', sans-serif;
-  --font-body: 'Source Sans 3', 'Segoe UI', Arial, sans-serif;
-
-  --safe-t: env(safe-area-inset-top, 0px);
-  --safe-b: env(safe-area-inset-bottom, 0px);
-
-  box-sizing: border-box;
-  padding-top: var(--safe-t);
-  padding-bottom: var(--safe-b);
-}
-
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:        #0A1826;
-    --bg-panel:  #102338;
-    --text:      #EAF2F3;
-    --text-soft: #9FB3BC;
-    --border:    #1E3A52;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:        #0A1826;
-  --bg-panel:  #102338;
-  --text:      #EAF2F3;
-  --text-soft: #9FB3BC;
-  --border:    #1E3A52;
-}
-
-*{ box-sizing: border-box; }
-html{ scroll-behavior: smooth; scroll-padding-top: calc(72px + var(--safe-t)); }
-body{
-  margin:0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.6;
-}
-img{ max-width:100%; display:block; }
-a{ color: inherit; }
-.wrap{
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-h1,h2,h3{
-  font-family: var(--font-head);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-  margin: 0 0 16px;
-}
-p{ max-width: 62ch; color: var(--text-soft); }
-.partner-banner{
-  display:block;
-  width: 100%;
-  background: #FFFFFF;
-  border-radius: 10px;
-  padding: 12px 14px 8px;
-  margin: 0 0 32px;
-  opacity: 0;
-  transform: translateY(14px);
-  animation: partnerIn 0.7s ease-out 0.2s forwards;
-}
-.partner-banner img{
-  display:block;
-  width: 100%;
-  height:auto;
-  border-radius: 4px;
-}
-@keyframes partnerIn{
-  to{ opacity:1; transform:translateY(0); }
-}
-
-.eyebrow{
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--aqua-deep);
-  margin: 0 0 8px;
-}
-
-/* ============================================
-   LANE STRIPE — signature motif, used sparingly
-   to mark a major transition, like lane markers
-   at the 5m/15m/25m points of a pool.
-   ============================================ */
-.lane-stripe{
-  height: 6px;
-  display:flex;
-}
-.lane-stripe span{ flex:1; }
-.lane-stripe span:nth-child(1){ background: var(--pool-navy); }
-.lane-stripe span:nth-child(2){ background: var(--aqua); }
-.lane-stripe span:nth-child(3){ background: var(--lane-red); }
-.lane-stripe span:nth-child(4){ background: var(--aqua); }
-.lane-stripe span:nth-child(5){ background: var(--pool-navy); }
-
-/* ============================================
-   NAV
-   ============================================ */
-header.site-nav{
-  position: sticky;
-  top: var(--safe-t);
-  z-index: 50;
-  background: rgba(11,37,69,0.92);
-  backdrop-filter: blur(6px);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.nav-row{
-  max-width:1120px;
-  margin:0 auto;
-  padding: 14px 24px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 24px;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-family: var(--font-head);
-  font-weight:800;
-  font-size:1.05rem;
-  color:#fff;
-  text-decoration:none;
-  white-space:nowrap;
-}
-.brand .mark{
-  width:30px; height:30px;
-  border-radius: 6px;
-  flex:none;
-  display:block;
-}
-nav.links{
-  display:flex;
-  gap: 22px;
-  flex-wrap: wrap;
-}
-nav.links a{
-  color: #CFE4E6;
-  text-decoration:none;
-  font-size:0.94rem;
-  font-weight: 500;
-  padding: 4px 2px;
-  border-bottom: 2px solid transparent;
-}
-nav.links a:hover{ color:#fff; border-bottom-color: var(--aqua); }
-.nav-cta{
-  background: var(--aqua);
-  color: var(--pool-navy);
-  font-weight:700;
-  font-size:0.9rem;
-  padding: 9px 16px;
-  border-radius: 6px;
-  text-decoration:none;
-  white-space:nowrap;
-}
-.nav-toggle{ display:none; }
-
-@media (max-width: 860px){
-  nav.links{ display:none; }
-  .nav-toggle{
-    display:inline-flex;
-    background:none;
-    border:1px solid rgba(255,255,255,0.3);
-    color:#fff;
-    border-radius:6px;
-    padding:8px 12px;
-    font-family: var(--font-body);
-  }
-}
-
-/* ============================================
-   HERO
-   ============================================ */
-.hero{
-  background:
-    radial-gradient(1100px 480px at 15% -10%, rgba(79,199,188,0.20), transparent 60%),
-    linear-gradient(180deg, var(--pool-navy) 0%, var(--pool-navy-2) 100%);
-  color:#fff;
-  padding: 96px 0 140px;
-  position:relative;
-}
-.hero .wrap{
-  display:block;
-}
-.hero-grid{
-  display:grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 48px;
-  align-items:center;
-}
-.hero h1{
-  font-size: clamp(2.4rem, 5vw, 3.6rem);
-  color:#fff;
-  margin-bottom: 20px;
-}
-.hero p.lead{
-  color: #C6DADC;
-  font-size: 1.08rem;
-  max-width: 48ch;
-}
-.hero-actions{
-  display:flex;
-  gap:14px;
-  margin-top: 30px;
-  flex-wrap:wrap;
-}
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  padding: 13px 24px;
-  border-radius: 6px;
-  font-weight:700;
-  font-size:0.96rem;
-  text-decoration:none;
-  cursor:pointer;
-  border: 1px solid transparent;
-}
-.btn-primary{ background: var(--aqua); color: var(--pool-navy); }
-.btn-primary:hover{ background: var(--aqua-deep); }
-.btn-outline{
-  background: transparent;
-  color:#fff;
-  border-color: rgba(255,255,255,0.45);
-}
-.btn-outline:hover{ border-color:#fff; }
-
-.hero-panel{
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 10px;
-  padding: 26px;
-}
-.hero-panel .stat-row{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-.stat{ padding: 10px 0; }
-.stat .num{
-  font-family: var(--font-head);
-  font-size: 2rem;
-  font-weight:800;
-  color: var(--aqua);
-  display:block;
-}
-.stat .label{
-  font-size:0.85rem;
-  color:#B9CDD0;
-}
-
-.wave{
-  position:absolute;
-  left:0; right:0; bottom:-1px;
-  line-height:0;
-}
-.wave svg{ width:100%; height:70px; display:block; }
-
-/* ============================================
-   SECTION SHELL
-   ============================================ */
-section.block{ padding: 84px 0; }
-section.block.alt{ background: var(--bg-panel); }
-.section-head{
-  max-width: 640px;
-  margin: 0 0 44px;
-}
-
-/* ============================================
-   TRUST STRIP
-   ============================================ */
-.trust-strip{
-  background: var(--foam-2);
-  padding: 22px 0;
-  border-bottom: 1px solid var(--border);
-}
-.trust-strip .wrap{
-  display:flex;
-  gap: 32px;
-  align-items:center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.badge-ph{
-  height: 34px;
-  min-width: 110px;
-  background: repeating-linear-gradient(135deg, #D3E1E3, #D3E1E3 6px, #C4D6D9 6px, #C4D6D9 12px);
-  border-radius: 4px;
-  opacity: 0.85;
-}
-
-/* ============================================
-   ABOUT — two column
-   ============================================ */
-.two-col{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 56px;
-  align-items:start;
-}
-.media-ph{
-  aspect-ratio: 4/3;
-  border-radius: 10px;
-  background:
-    linear-gradient(160deg, var(--pool-navy-2), var(--pool-navy)),
-    repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 26px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color: rgba(255,255,255,0.55);
-  font-size:0.85rem;
-  font-family: var(--font-body);
-}
-
-/* ============================================
-   PROCESS — numbered steps (real sequence)
-   ============================================ */
-.steps{
-  counter-reset: step;
-  display:grid;
-  gap: 0;
-  border-top: 1px solid var(--border);
-}
-.step{
-  counter-increment: step;
-  display:grid;
-  grid-template-columns: 64px 1fr;
-  gap: 20px;
-  padding: 22px 0;
-  border-bottom: 1px solid var(--border);
-}
-.step::before{
-  content: counter(step);
-  font-family: var(--font-head);
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--aqua-deep);
-}
-.step h3{ margin: 0 0 4px; font-size: 1.05rem; }
-.step p{ margin:0; }
-
-/* ============================================
-   CREDIBILITY — verify tool + testimonials
-   ============================================ */
-.verify-box{
-  background: var(--pool-navy);
-  color:#fff;
-  border-radius: 12px;
-  padding: 36px;
-  display:grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 32px;
-  align-items:center;
-  margin-bottom: 56px;
-}
-.verify-box h3{ color:#fff; margin-bottom:8px; }
-.verify-box p{ color:#C6DADC; margin-bottom:0; }
-.verify-form{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.verify-form input{
-  flex:1;
-  min-width: 180px;
-  padding: 13px 14px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.08);
-  color:#fff;
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-}
-.verify-form input::placeholder{ color: #9FB6B9; }
-.form-msg{
-  margin-top: 14px;
-  font-size: 0.9rem;
-  padding: 10px 14px;
-  border-radius: 6px;
-  display:none;
-}
-.form-msg.show{ display:block; }
-.form-msg.ok{ background: rgba(79,199,188,0.18); color:#DFF7F4; border:1px solid rgba(79,199,188,0.4); }
-.form-msg.err{ background: rgba(225,85,58,0.18); color:#FFDCD3; border:1px solid rgba(225,85,58,0.4); }
-.verify-result{
-  margin-top: 16px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.16);
-  border-radius: 8px;
-  padding: 16px 18px;
-  display:none;
-}
-.verify-result.show{ display:block; }
-.verify-result .vr-row{ display:flex; justify-content:space-between; padding:5px 0; font-size:0.92rem; }
-.verify-result .vr-row .k{ color:#9FB6B9; }
-.verify-result .vr-row .v{ font-weight:700; }
-.verify-status{
-  display:inline-block;
-  font-size:0.78rem;
-  font-weight:700;
-  padding: 2px 10px;
-  border-radius: 20px;
-  text-transform: capitalize;
-}
-.verify-status.valid{ background: var(--aqua); color: var(--pool-navy); }
-.verify-status.other{ background: var(--lane-red); color:#fff; }
-.btn[disabled]{ opacity:0.6; cursor:not-allowed; }
-
-.testi-grid{
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-}
-.testi{
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 22px;
-  background: var(--bg-panel);
-}
-.testi .quote-ph{
-  height: 12px;
-  background: var(--foam-2);
-  border-radius: 3px;
-  margin-bottom: 8px;
-}
-.testi .quote-ph:nth-child(3){ width: 80%; }
-.testi .person{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top: 16px;
-}
-.avatar-ph{
-  width:36px; height:36px;
-  border-radius:50%;
-  background: linear-gradient(135deg, var(--aqua), var(--pool-navy-2));
-  flex:none;
-}
-.person .name{ font-weight:700; font-size:0.9rem; }
-.person .meta{ font-size:0.8rem; color: var(--text-soft); }
-
-/* ============================================
-   GALLERY
-   ============================================ */
-.gallery-grid{
-  display:grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-}
-.gallery-grid .media-ph:nth-child(3n+1){ grid-row: span 2; aspect-ratio: 4/5; }
-
-/* ============================================
-   JOIN — form skeleton
-   ============================================ */
-.join{
-  background: var(--pool-navy);
-  color:#fff;
-}
-.join .section-head p{ color:#C6DADC; }
-.join-form{
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 12px;
-  padding: 32px;
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-.field{ display:flex; flex-direction:column; gap:6px; }
-.field.full{ grid-column: 1 / -1; }
-.field label{ font-size:0.85rem; color:#B9CDD0; }
-.field input, .field select{
-  padding: 12px 14px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.06);
-  color:#fff;
-  font-family: var(--font-body);
-}
-.join-form .btn{ grid-column: 1 / -1; justify-self:start; margin-top:6px; }
-
-/* ============================================
-   RESOURCES / BLOG
-   ============================================ */
-.post-list{
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-.post-card{
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow:hidden;
-  background: var(--bg-panel);
-}
-.post-card .media-ph{ aspect-ratio: 16/10; border-radius:0; }
-.post-card .post-body{ padding: 18px; }
-.post-card h3{ font-size: 1rem; margin: 0 0 6px; }
-.post-card p{ font-size: 0.9rem; margin:0; }
-
-/* ============================================
-   CONTACT
-   ============================================ */
-.contact-grid{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-}
-.contact-item{
-  display:flex;
-  gap: 14px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border);
-}
-.contact-item .k{ font-weight:700; min-width: 110px; }
-.contact-item .v{ color: var(--text-soft); }
-
-/* ============================================
-   FOOTER
-   ============================================ */
-footer{
-  background: var(--pool-navy);
-  color: #B9CDD0;
-  padding: 48px 0 calc(32px + var(--safe-b));
-}
-.footer-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  flex-wrap:wrap;
-  gap: 24px;
-}
-.footer-links{ display:flex; gap: 18px; flex-wrap:wrap; }
-.footer-links a{ color:#B9CDD0; text-decoration:none; font-size:0.9rem; }
-.footer-links a:hover{ color:#fff; }
-.footer-fine{
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,0.12);
-  font-size: 0.82rem;
-  color: #7F98A0;
-}
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-@media (max-width: 860px){
-  .hero-grid{ grid-template-columns: 1fr; }
-  .two-col{ grid-template-columns: 1fr; }
-  .verify-box{ grid-template-columns: 1fr; }
-  .testi-grid{ grid-template-columns: 1fr; }
-  .gallery-grid{ grid-template-columns: repeat(2,1fr); }
-  .join-form{ grid-template-columns: 1fr; }
-  .post-list{ grid-template-columns: 1fr; }
-  .contact-grid{ grid-template-columns: 1fr; }
-}
-
-/* Accessibility: visible focus, reduced motion */
-a:focus-visible, button:focus-visible, input:focus-visible{
-  outline: 3px solid var(--aqua);
-  outline-offset: 2px;
-}
-@media (prefers-reduced-motion: reduce){
-  html{ scroll-behavior:auto; }
-  *{ animation:none !important; transition:none !important; }
-  .partner-banner{ opacity:1; transform:none; }
-}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header class="site-nav">
   <div class="nav-row">
-    <a href="#home" class="brand"><img class="mark" src="assets/logo.png" alt="Search Foundation ASCA logo">Search Foundation ASCA</a>
+    <a href="index.html" class="brand"><img class="mark" src="assets/logo.png" alt="Search Foundation ASCA logo">Search Foundation ASCA</a>
     <nav class="links">
-      <a href="#about">About</a>
-      <a href="#process">Certification</a>
-      <a href="#credibility">Proof &amp; Verify</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#resources">Resources</a>
-      <a href="#contact">Contact</a>
+      <a href="index.html" class="active">Home</a>
+      <a href="about.html">About</a>
+      <a href="certification.html">Certification</a>
+      <a href="testimonials.html">Testimonials &amp; Alumni</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="blog.html">Blog</a>
+      <a href="resources.html">Resources</a>
+      <a href="contact.html">Contact</a>
     </nav>
-    <a href="#join" class="nav-cta">Join now</a>
+    <a href="join.html" class="nav-cta">Join now</a>
   </div>
 </header>
-
-<!-- ============ HOME / HERO ============ -->
 <section id="home" class="hero">
   <div class="wrap">
     <div class="partner-banner">
@@ -638,8 +39,8 @@ a:focus-visible, button:focus-visible, input:focus-visible{
       <h1>[Headline: state your core promise in one line]</h1>
       <p class="lead">[Sub line: one or two sentences on what the foundation does and for whom.]</p>
       <div class="hero-actions">
-        <a href="#join" class="btn btn-primary">Join the community</a>
-        <a href="#credibility" class="btn btn-outline">Verify a certificate</a>
+        <a href="join.html" class="btn btn-primary">Join the community</a>
+        <a href="testimonials.html" class="btn btn-outline">Verify a certificate</a>
       </div>
     </div>
     <div class="hero-panel">
@@ -666,162 +67,48 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   </div>
 </div>
 
-<!-- ============ ABOUT ============ -->
-<section id="about" class="block">
-  <div class="wrap two-col">
-    <div>
-      <p class="eyebrow">About us</p>
-      <h2>[Section title: who runs the foundation]</h2>
-      <p>[Short history and mission, in plain language. State facts only.]</p>
-      <p>[How the foundation relates to ASCA: authorized partner, training center, or exam preparation body. Be exact.]</p>
-    </div>
-    <div class="media-ph">[Team photo]</div>
-  </div>
-</section>
-
-<!-- ============ CERTIFICATION PROCESS ============ -->
-<section id="process" class="block alt">
+<section class="block alt">
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow">Certification &amp; process</p>
-      <h2>How certification works</h2>
-      <p>[One paragraph plain-language explanation of ASCA levels and what this foundation helps with.]</p>
+      <p class="eyebrow">Explore</p>
+      <h2>Find what you need</h2>
     </div>
-    <div class="steps">
-      <div class="step"><h3>[Step title]</h3><p>[Step detail]</p></div>
-      <div class="step"><h3>[Step title]</h3><p>[Step detail]</p></div>
-      <div class="step"><h3>[Step title]</h3><p>[Step detail]</p></div>
-      <div class="step"><h3>[Step title]</h3><p>[Step detail]</p></div>
-      <div class="step"><h3>[Step title]</h3><p>[Step detail]</p></div>
-    </div>
-  </div>
-</section>
-
-<div class="lane-stripe"><span></span><span></span><span></span><span></span><span></span></div>
-
-<!-- ============ CREDIBILITY / PROOF ============ -->
-<section id="credibility" class="block">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Credibility &amp; proof</p>
-      <h2>Proof, not promises</h2>
-      <p>[Explain that every certificate can be checked, and every testimonial is attributed.]</p>
-    </div>
-
-    <div class="verify-box">
-      <div>
-        <h3>Verify a certificate</h3>
-        <p>Enter a certificate number to confirm it was issued by us.</p>
-      </div>
-      <div style="width:100%;">
-        <form class="verify-form" id="verifyForm">
-          <input type="text" id="certInput" placeholder="Certificate number" required>
-          <button class="btn btn-primary" type="submit" id="verifyBtn">Verify</button>
-        </form>
-        <div class="form-msg" id="verifyMsg"></div>
-        <div class="verify-result" id="verifyResult">
-          <div class="vr-row"><span class="k">Status</span><span class="v"><span class="verify-status" id="vrStatus"></span></span></div>
-          <div class="vr-row"><span class="k">Holder name</span><span class="v" id="vrName"></span></div>
-          <div class="vr-row"><span class="k">Level</span><span class="v" id="vrLevel"></span></div>
-          <div class="vr-row"><span class="k">Issue date</span><span class="v" id="vrDate"></span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="testi-grid">
-      <div class="testi">
-        <div class="quote-ph"></div><div class="quote-ph"></div><div class="quote-ph"></div>
-        <div class="person"><div class="avatar-ph"></div><div><div class="name">[Name]</div><div class="meta">[City · Level]</div></div></div>
-      </div>
-      <div class="testi">
-        <div class="quote-ph"></div><div class="quote-ph"></div><div class="quote-ph"></div>
-        <div class="person"><div class="avatar-ph"></div><div><div class="name">[Name]</div><div class="meta">[City · Level]</div></div></div>
-      </div>
-      <div class="testi">
-        <div class="quote-ph"></div><div class="quote-ph"></div><div class="quote-ph"></div>
-        <div class="person"><div class="avatar-ph"></div><div><div class="name">[Name]</div><div class="meta">[City · Level]</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ GALLERY ============ -->
-<section id="gallery" class="block alt">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Gallery</p>
-      <h2>Clinics, exams, and graduation days</h2>
-      <p>[Each photo will carry a caption with date and place once added.]</p>
-    </div>
-    <div class="gallery-grid">
-      <div class="media-ph">[Photo]</div>
-      <div class="media-ph">[Photo]</div>
-      <div class="media-ph">[Photo]</div>
-      <div class="media-ph">[Photo]</div>
-      <div class="media-ph">[Photo]</div>
-      <div class="media-ph">[Photo]</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ JOIN ============ -->
-<section id="join" class="block join">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Join us</p>
-      <h2>Start your onboarding</h2>
-      <p>[Tell the applicant exactly what happens after they submit the form.]</p>
-    </div>
-    <form class="join-form" id="joinForm">
-      <div class="field"><label>Full name</label><input type="text" id="jName" required></div>
-      <div class="field"><label>Phone</label><input type="tel" id="jPhone" required></div>
-      <div class="field"><label>Email</label><input type="email" id="jEmail" required></div>
-      <div class="field"><label>City</label><input type="text" id="jCity" required></div>
-      <div class="field full">
-        <label>Current swimming level</label>
-        <select id="jLevel">
-          <option value="">Select a level</option>
-          <option value="beginner">Beginner, no formal training</option>
-          <option value="intermediate">Intermediate, some training</option>
-          <option value="advanced">Advanced, competitive experience</option>
-          <option value="coach">Already coaching</option>
-        </select>
-      </div>
-      <button class="btn btn-primary" type="submit" id="joinBtn">Submit application</button>
-    </form>
-    <div class="form-msg" id="joinMsg" style="margin-top:16px;"></div>
-  </div>
-</section>
-
-<!-- ============ RESOURCES / BLOG ============ -->
-<section id="resources" class="block">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Resources</p>
-      <h2>Guides for aspirants and coaches</h2>
-    </div>
-    <div class="post-list">
-      <div class="post-card"><div class="media-ph">[Image]</div><div class="post-body"><h3>[Article title]</h3><p>[One line summary]</p></div></div>
-      <div class="post-card"><div class="media-ph">[Image]</div><div class="post-body"><h3>[Article title]</h3><p>[One line summary]</p></div></div>
-      <div class="post-card"><div class="media-ph">[Image]</div><div class="post-body"><h3>[Article title]</h3><p>[One line summary]</p></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ CONTACT ============ -->
-<section id="contact" class="block alt">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Contact</p>
-      <h2>Reach us directly</h2>
-    </div>
-    <div class="contact-grid">
-      <div>
-        <div class="contact-item"><div class="k">Address</div><div class="v">[Street, city, PIN]</div></div>
-        <div class="contact-item"><div class="k">Phone</div><div class="v">[Phone number]</div></div>
-        <div class="contact-item"><div class="k">Email</div><div class="v">[Email address]</div></div>
-      </div>
-      <div class="media-ph">[Map]</div>
+    <div class="page-grid">
+      <a class="page-card" href="about.html">
+        <h3>About us</h3>
+        <p>Who runs the foundation and how it works with ASCA.</p>
+        <span class="go">View page &rsaquo;</span>
+      </a>
+      <a class="page-card" href="certification.html">
+        <h3>Certification &amp; process</h3>
+        <p>How ASCA levels work and the steps to get certified.</p>
+        <span class="go">View page &rsaquo;</span>
+      </a>
+      <a class="page-card" href="testimonials.html">
+        <h3>Testimonials &amp; Alumni</h3>
+        <p>Check a certificate number and read real testimonials.</p>
+        <span class="go">View page &rsaquo;</span>
+      </a>
+      <a class="page-card" href="gallery.html">
+        <h3>Gallery</h3>
+        <p>Photos from clinics, exams, and graduation days.</p>
+        <span class="go">View page &rsaquo;</span>
+      </a>
+      <a class="page-card" href="blog.html">
+        <h3>Blog</h3>
+        <p>News, coach stories, and event recaps.</p>
+        <span class="go">View page &rsaquo;</span>
+      </a>
+      <a class="page-card" href="resources.html">
+        <h3>Resources</h3>
+        <p>Guides for aspirants and coaches.</p>
+        <span class="go">View page &rsaquo;</span>
+      </a>
+      <a class="page-card" href="contact.html">
+        <h3>Contact</h3>
+        <p>Address, phone, and email to reach us directly.</p>
+        <span class="go">View page &rsaquo;</span>
+      </a>
     </div>
   </div>
 </section>
@@ -836,102 +123,8 @@ a:focus-visible, button:focus-visible, input:focus-visible{
         <a href="https://www.instagram.com/ascaindia.searchfoundation/" target="_blank" rel="noopener">Instagram</a>
       </div>
     </div>
-    <div class="footer-fine">[Registration number, if applicable] · © 2026 Search Foundation ASCA</div>
+    <div class="footer-fine">[Registration number, if applicable] &middot; &copy; 2026 Search Foundation ASCA</div>
   </div>
 </footer>
-
-<script>
-// ============================================
-// SUPABASE CONNECTION
-// Replace these two values only if you move to a
-// different Supabase project.
-// ============================================
-const SUPABASE_URL = "https://mxooxaphrmgqfngktbmp.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_D9CI6iOBhs82traRh1vZzA_9sulFp45";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-function showMsg(el, text, ok){
-  el.textContent = text;
-  el.className = "form-msg show " + (ok ? "ok" : "err");
-}
-
-// ---------- Certificate verify ----------
-const verifyForm   = document.getElementById("verifyForm");
-const verifyBtn    = document.getElementById("verifyBtn");
-const verifyMsg    = document.getElementById("verifyMsg");
-const verifyResult = document.getElementById("verifyResult");
-
-verifyForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const number = document.getElementById("certInput").value.trim();
-  verifyResult.classList.remove("show");
-  verifyMsg.classList.remove("show");
-  if(!number){ return; }
-
-  verifyBtn.disabled = true;
-  verifyBtn.textContent = "Checking...";
-
-  try{
-    const { data, error } = await sb
-      .from("certificates")
-      .select("certificate_number, holder_name, level, issue_date, status")
-      .eq("certificate_number", number)
-      .maybeSingle();
-
-    if(error) throw error;
-
-    if(!data){
-      showMsg(verifyMsg, "No certificate found with that number. Check the number and try again.", false);
-    } else {
-      document.getElementById("vrStatus").textContent = data.status;
-      document.getElementById("vrStatus").className = "verify-status " + (data.status === "valid" ? "valid" : "other");
-      document.getElementById("vrName").textContent  = data.holder_name;
-      document.getElementById("vrLevel").textContent = data.level;
-      document.getElementById("vrDate").textContent  = data.issue_date;
-      verifyResult.classList.add("show");
-    }
-  } catch(err){
-    showMsg(verifyMsg, "Could not check the certificate right now. Please try again in a moment.", false);
-    console.error(err);
-  } finally {
-    verifyBtn.disabled = false;
-    verifyBtn.textContent = "Verify";
-  }
-});
-
-// ---------- Join form ----------
-const joinForm = document.getElementById("joinForm");
-const joinBtn  = document.getElementById("joinBtn");
-const joinMsg  = document.getElementById("joinMsg");
-
-joinForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  joinMsg.classList.remove("show");
-
-  const payload = {
-    full_name:  document.getElementById("jName").value.trim(),
-    phone:      document.getElementById("jPhone").value.trim(),
-    email:      document.getElementById("jEmail").value.trim(),
-    city:       document.getElementById("jCity").value.trim(),
-    swim_level: document.getElementById("jLevel").value || null
-  };
-
-  joinBtn.disabled = true;
-  joinBtn.textContent = "Submitting...";
-
-  try{
-    const { error } = await sb.from("applications").insert(payload);
-    if(error) throw error;
-    showMsg(joinMsg, "Application received. Our team will contact you within 2 working days.", true);
-    joinForm.reset();
-  } catch(err){
-    showMsg(joinMsg, "Something went wrong. Please try again, or contact us directly.", false);
-    console.error(err);
-  } finally {
-    joinBtn.disabled = false;
-    joinBtn.textContent = "Submit application";
-  }
-});
-</script>
 </body>
 </html>

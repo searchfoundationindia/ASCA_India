@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Testimonials & Alumni - Search Foundation ASCA</title>
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-row">
+    <a href="index.html" class="brand"><img class="mark" src="assets/logo.png" alt="Search Foundation ASCA logo">Search Foundation ASCA</a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="certification.html">Certification</a>
+      <a href="testimonials.html" class="active">Testimonials &amp; Alumni</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="blog.html">Blog</a>
+      <a href="resources.html">Resources</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="join.html" class="nav-cta">Join now</a>
+  </div>
+</header>
+<section id="testimonials" class="block" style="padding-top:140px;">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Testimonials &amp; alumni</p>
+      <h2>Hear from our certified coaches</h2>
+      <p>[Explain that every certificate can be checked, and every testimonial here comes from a real alumnus.]</p>
+    </div>
+
+    <div class="verify-box">
+      <div>
+        <h3>Verify a certificate</h3>
+        <p>Enter a certificate number to confirm it was issued by us.</p>
+      </div>
+      <div style="width:100%;">
+        <form class="verify-form" id="verifyForm">
+          <input type="text" id="certInput" placeholder="Certificate number" required>
+          <button class="btn btn-primary" type="submit" id="verifyBtn">Verify</button>
+        </form>
+        <div class="form-msg" id="verifyMsg"></div>
+        <div class="verify-result" id="verifyResult">
+          <div class="vr-row"><span class="k">Status</span><span class="v"><span class="verify-status" id="vrStatus"></span></span></div>
+          <div class="vr-row"><span class="k">Holder name</span><span class="v" id="vrName"></span></div>
+          <div class="vr-row"><span class="k">Level</span><span class="v" id="vrLevel"></span></div>
+          <div class="vr-row"><span class="k">Issue date</span><span class="v" id="vrDate"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-grid">
+      <div class="testi">
+        <div class="quote-ph"></div><div class="quote-ph"></div><div class="quote-ph"></div>
+        <div class="person"><div class="avatar-ph"></div><div><div class="name">[Name]</div><div class="meta">[City · Level]</div></div></div>
+      </div>
+      <div class="testi">
+        <div class="quote-ph"></div><div class="quote-ph"></div><div class="quote-ph"></div>
+        <div class="person"><div class="avatar-ph"></div><div><div class="name">[Name]</div><div class="meta">[City · Level]</div></div></div>
+      </div>
+      <div class="testi">
+        <div class="quote-ph"></div><div class="quote-ph"></div><div class="quote-ph"></div>
+        <div class="person"><div class="avatar-ph"></div><div><div class="name">[Name]</div><div class="meta">[City · Level]</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <div class="brand" style="color:#fff;"><img class="mark" src="assets/logo.png" alt="Search Foundation ASCA logo">Search Foundation ASCA</div>
+      <div class="footer-links">
+        <a href="https://linkedin.com/company/search-foundation-asca" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.facebook.com/profile.php?id=61594645853863" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.instagram.com/ascaindia.searchfoundation/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="footer-fine">[Registration number, if applicable] &middot; &copy; 2026 Search Foundation ASCA</div>
+  </div>
+</footer>
+<script>
+const SUPABASE_URL = "https://mxooxaphrmgqfngktbmp.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_D9CI6iOBhs82traRh1vZzA_9sulFp45";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function showMsg(el, text, ok){
+  el.textContent = text;
+  el.className = "form-msg show " + (ok ? "ok" : "err");
+}
+
+const verifyForm   = document.getElementById("verifyForm");
+const verifyBtn    = document.getElementById("verifyBtn");
+const verifyMsg    = document.getElementById("verifyMsg");
+const verifyResult = document.getElementById("verifyResult");
+
+verifyForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const number = document.getElementById("certInput").value.trim();
+  verifyResult.classList.remove("show");
+  verifyMsg.classList.remove("show");
+  if(!number){ return; }
+
+  verifyBtn.disabled = true;
+  verifyBtn.textContent = "Checking...";
+
+  try{
+    const { data, error } = await sb
+      .from("certificates")
+      .select("certificate_number, holder_name, level, issue_date, status")
+      .eq("certificate_number", number)
+      .maybeSingle();
+
+    if(error) throw error;
+
+    if(!data){
+      showMsg(verifyMsg, "No certificate found with that number. Check the number and try again.", false);
+    } else {
+      document.getElementById("vrStatus").textContent = data.status;
+      document.getElementById("vrStatus").className = "verify-status " + (data.status === "valid" ? "valid" : "other");
+      document.getElementById("vrName").textContent  = data.holder_name;
+      document.getElementById("vrLevel").textContent = data.level;
+      document.getElementById("vrDate").textContent  = data.issue_date;
+      verifyResult.classList.add("show");
+    }
+  } catch(err){
+    showMsg(verifyMsg, "Could not check the certificate right now. Please try again in a moment.", false);
+    console.error(err);
+  } finally {
+    verifyBtn.disabled = false;
+    verifyBtn.textContent = "Verify";
+  }
+});
+</script>
+</body>
+</html>
