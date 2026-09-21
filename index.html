@@ -91,9 +91,12 @@ p{ max-width: 62ch; color: var(--text-soft); }
 .partner-banner{
   display:block;
   width: 100%;
+  max-width: 560px;
   background: #FFFFFF;
-  padding: 0;
-  margin: 0 0 40px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 10px;
+  padding: 12px 14px 8px;
+  margin: 0 0 32px;
   opacity: 0;
   transform: translateY(14px);
   animation: partnerIn 0.7s ease-out 0.2s forwards;
@@ -102,6 +105,7 @@ p{ max-width: 62ch; color: var(--text-soft); }
   display:block;
   width: 100%;
   height:auto;
+  border-radius: 4px;
 }
 @keyframes partnerIn{
   to{ opacity:1; transform:translateY(0); }
@@ -626,10 +630,10 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 
 <!-- ============ HOME / HERO ============ -->
 <section id="home" class="hero">
-  <div class="partner-banner">
-    <img src="assets/partnership-banner.jpg" alt="Search Foundation and American Swimming Coaches Association partnership">
-  </div>
   <div class="wrap">
+    <div class="partner-banner">
+      <img src="assets/partnership-banner.jpg" alt="Search Foundation and American Swimming Coaches Association partnership">
+    </div>
     <div class="hero-grid">
     <div>
       <p class="eyebrow">Swim coach certification, done right</p>
