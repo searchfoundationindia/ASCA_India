@@ -88,6 +88,26 @@ h1,h2,h3{
   margin: 0 0 16px;
 }
 p{ max-width: 62ch; color: var(--text-soft); }
+.partner-banner{
+  display:inline-block;
+  background: rgba(255,255,255,0.96);
+  border-radius: 10px;
+  padding: 14px 18px 10px;
+  margin-bottom: 28px;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: partnerIn 0.7s ease-out 0.2s forwards;
+}
+.partner-banner img{
+  display:block;
+  max-width: 100%;
+  height:auto;
+  border-radius: 4px;
+}
+@keyframes partnerIn{
+  to{ opacity:1; transform:translateY(0); }
+}
+
 .eyebrow{
   font-family: var(--font-body);
   font-weight: 600;
@@ -581,6 +601,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
   *{ animation:none !important; transition:none !important; }
+  .partner-banner{ opacity:1; transform:none; }
 }
 </style>
 </head>
@@ -605,6 +626,9 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 <section id="home" class="hero">
   <div class="wrap">
     <div>
+      <div class="partner-banner">
+        <img src="assets/partnership-banner.jpg" alt="Search Foundation and American Swimming Coaches Association partnership">
+      </div>
       <p class="eyebrow">Swim coach certification, done right</p>
       <h1>[Headline: state your core promise in one line]</h1>
       <p class="lead">[Sub line: one or two sentences on what the foundation does and for whom.]</p>
